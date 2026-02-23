@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
+    <title>Passenger Feedback · Indian Customs</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f5f9ff;
+            padding: 15px 10px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: min(1200px, 100%);
+            max-width: 100%;
+            background: #ffffff;
+            padding: 20px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 20, 50, 0.08);
+            border: 1px solid #dde5f0;
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-spinner {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #2f5da9;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-spinner p {
+            color: #1a3b62;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        /* Responsive Header - FIXED CENTERING */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+            text-align: center;
+            border-bottom: 2px solid #2f5da9;
+        }
+        
+        .header .logo {
+            width: 160px;
+            height: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 5px;
+            border: 1px solid #d0ddee;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .header-text {
+            text-align: center;
+            flex: 0 1 auto;
+        }
+        
+        .header-text h2 {
+            color: #1e3a6b;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 28px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            line-height: 1.3;
+            text-align: center;
+        }
+        
+        .header-text p {
+            color: #2b4a77;
+            font-weight: 600;
+            font-size: 16px;
+            background: #e9f0fa;
+            padding: 6px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            line-height: 1.4;
+            text-align: center;
+            margin: 0 auto;
+            border: 1px solid #d0ddee;
+        }
+        
+        .title-bar {
+            background: #2f5da9;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 22px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border: 1px solid #1e4a7a;
+        }
+        
+        .title-bar:last-of-type {
+            font-size: 16px;
+            padding: 10px;
+            background: #3a6ab0;
+        }
+        
+        .section {
+            margin-top: 25px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 15px 20px 20px;
+            border: 1px solid #d2e0f0;
+        }
+        
+        .section h3 {
+            background: #eef3fb;
+            padding: 8px 12px;
+            border-left: 5px solid #2f5da9;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a3b62;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .grid-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 15px 0;
+        }
+        
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .field-group label {
+            font-weight: 700;
+            color: #1a3b62;
+            font-size: 16px;
+        }
+        
+        .field-group input, .field-group select {
+            padding: 12px 16px;
+            border: 2px solid #b8cee8;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 100%;
+            background: #fbfdff;
+            transition: 0.2s;
+        }
+        
+        .field-group input:focus, .field-group select:focus {
+            border-color: #2f5da9;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(47, 93, 169, 0.1);
+        }
+        
+        /* Arrival/Departure Container */
+        .arrival-departure-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            background: #f0f7ff;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 2px solid #b8cee8;
+            margin: 15px 0;
+        }
+        
+        .inline-label {
+            font-weight: 700;
+            color: #1a3b62;
+            font-size: 18px;
+            min-width: 160px;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #1e3e6d;
+            font-size: 17px;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 12px;
+            border: 2px solid #2f5da9;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 0 1 auto;
+        }
+        
+        .radio-group label:hover {
+            background: #e3efff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(47, 93, 169, 0.15);
+        }
+        
+        .radio-group input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #2f5da9;
+        }
+        
+        /* Responsive Tables */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 15px 0;
+            border-radius: 12px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 30, 60, 0.08);
+            border: 2px solid #b8cee8;
+        }
+        
+        table th {
+            background: #2f5da9;
+            color: white;
+            padding: 12px 8px;
+            font-weight: 700;
+            font-size: 16px;
+            border: 1px solid #1e4a7a;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        table td {
+            padding: 12px 8px;
+            border: 1px solid #c0d4f0;
+            text-align: center;
+            background: white;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        table td:first-child {
+            font-weight: 600;
+            color: #1a3b62;
+            text-align: left;
+            padding-left: 15px;
+            white-space: normal;
+            min-width: 180px;
+        }
+        
+        table input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #2f5da9;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        /* Conditional Sections */
+        .conditional-section {
+            background: #f8fcff;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 2px dashed #2f5da9;
+        }
+        
+        .duty-question {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+            background: #f0f7ff;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 2px solid #b8cee8;
+        }
+        
+        .duty-question span {
+            font-weight: 700;
+            color: #1a3b62;
+            font-size: 17px;
+        }
+        
+        .duty-question label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            background: white;
+            padding: 8px 20px;
+            border-radius: 12px;
+            border: 2px solid #2f5da9;
+            font-size: 16px;
+            cursor: pointer;
+            flex: 0 1 auto;
+        }
+        
+        .duty-question input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #2f5da9;
+        }
+        
+        .remarks-area {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #b8cee8;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 16px;
+            background: #fbfdff;
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .submit-area {
+            text-align: center;
+            margin: 30px 0 15px;
+        }
+        
+        .submit-btn {
+            background: #2f5da9;
+            color: white;
+            font-weight: 700;
+            font-size: 22px;
+            padding: 14px 50px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(47, 93, 169, 0.3);
+            transition: 0.2s;
+            letter-spacing: 1px;
+            border: 2px solid #1e4a7a;
+            width: fit-content;
+            margin: 0 auto;
+        }
+        
+        .submit-btn:hover {
+            background: #1e4a7a;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(47, 93, 169, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            background: #95a5a6;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+            border-color: #7f8c8d;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 15px;
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: #1e3a6b;
+            border: 2px solid #b8cee8;
+            line-height: 1.6;
+        }
+        
+        .arrival-country-block {
+            margin: 15px 0;
+            padding: 15px 20px;
+            background: #f0f7ff;
+            border-radius: 12px;
+            border: 2px solid #b8cee8;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .arrival-country-block label {
+            font-weight: 700;
+            color: #1a3b62;
+            font-size: 17px;
+        }
+        
+        .select-style {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #2f5da9;
+            background: white;
+            font-size: 16px;
+            min-width: 280px;
+            flex: 1;
+        }
+        
+        /* Overall Experience Section */
+        .overall-section {
+            margin-top: 25px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 15px 20px 20px;
+            border: 1px solid #d2e0f0;
+        }
+        
+        .overall-section h3 {
+            background: #eef3fb;
+            padding: 8px 12px;
+            border-left: 5px solid #2f5da9;
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a3b62;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        /* Desktop Overall Table */
+        .overall-table-desktop {
+            width: 80%;
+            margin: 15px auto;
+            border-collapse: collapse;
+            display: table;
+        }
+        
+        .overall-table-desktop th {
+            background: #2f5da9;
+            color: white;
+            font-size: 16px;
+            padding: 12px 5px;
+            text-align: center;
+            border: 1px solid #1e4a7a;
+        }
+        
+        .overall-table-desktop td {
+            padding: 15px 5px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #c0d4f0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .overall-table-desktop td:hover {
+            background-color: #e3efff;
+        }
+        
+        .overall-table-desktop td input[type="radio"] {
+            display: block;
+            margin: 0 auto;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+        
+        /* Mobile Overall Grid */
+        .overall-mobile-grid {
+            display: none;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 10px 0;
+        }
+        
+        .overall-card {
+            background: #f8fcff;
+            border: 2px solid #b8cee8;
+            border-radius: 12px;
+            padding: 12px 8px;
+            text-align: center;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        
+        .overall-card:hover {
+            background: #e3efff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(47, 93, 169, 0.15);
+        }
+        
+        .overall-card-label {
+            font-weight: 700;
+            color: #1a3b62;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: block;
+            pointer-events: none;
+        }
+        
+        .overall-card input[type="radio"] {
+            width: 24px;
+            height: 24px;
+            accent-color: #2f5da9;
+            cursor: pointer;
+            margin: 0 auto;
+            display: block;
+            pointer-events: none;
+        }
+        
+        /* Card color borders */
+        .overall-card.very-good {
+            border-color: #2f5da9;
+        }
+        
+        .overall-card.good {
+            border-color: #27ae60;
+        }
+        
+        .overall-card.satisfactory {
+            border-color: #f39c12;
+        }
+        
+        .overall-card.unsatisfactory {
+            border-color: #e74c3c;
+        }
+        
+        /* Selected state for cards */
+        .overall-card.selected {
+            background: #d4e6ff;
+            border-width: 3px;
+        }
+        
+        /* Error message */
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                gap: 15px;
+            }
+            
+            .header .logo {
+                width: 120px;
+            }
+            
+            .header-text h2 {
+                font-size: 22px;
+            }
+            
+            .header-text p {
+                font-size: 13px;
+                padding: 5px 15px;
+            }
+            
+            .title-bar {
+                font-size: 18px;
+                padding: 10px;
+            }
+            
+            .title-bar:last-of-type {
+                font-size: 14px;
+            }
+            
+            .section h3, .overall-section h3 {
+                font-size: 18px;
+                padding: 6px 10px;
+            }
+            
+            .grid-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+            }
+            
+            .radio-group label {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .duty-question {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .duty-question label {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            table td:first-child {
+                min-width: 120px;
+                font-size: 14px;
+            }
+            
+            table th, table td {
+                font-size: 14px;
+                padding: 10px 4px;
+            }
+            
+            .arrival-country-block {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .arrival-country-block label {
+                margin-bottom: 5px;
+            }
+            
+            .select-style {
+                width: 100%;
+                min-width: auto;
+            }
+            
+            .submit-btn {
+                font-size: 18px;
+                padding: 12px 40px;
+            }
+            
+            .overall-table-desktop {
+                display: none;
+            }
+            
+            .overall-mobile-grid {
+                display: grid;
+            }
+            
+            .footer {
+                font-size: 13px;
+                padding: 12px;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .overall-table-desktop {
+                display: table;
+            }
+            
+            .overall-mobile-grid {
+                display: none;
+            }
+        }
+        
+        /* Large Screens (32-inch) */
+        @media (min-width: 1600px) {
+            .container {
+                width: 1400px;
+                padding: 30px 40px;
+            }
+            
+            .header .logo {
+                width: 180px;
+            }
+            
+            .header-text h2 {
+                font-size: 32px;
+            }
+            
+            .header-text p {
+                font-size: 18px;
+                padding: 8px 25px;
+            }
+            
+            .title-bar {
+                font-size: 26px;
+                padding: 15px;
+            }
+            
+            .section h3, .overall-section h3 {
+                font-size: 24px;
+                padding: 10px 15px;
+            }
+            
+            .field-group label {
+                font-size: 18px;
+            }
+            
+            .field-group input, .field-group select {
+                font-size: 18px;
+                padding: 14px 18px;
+            }
+            
+            table th {
+                font-size: 18px;
+                padding: 15px 10px;
+            }
+            
+            table td {
+                font-size: 17px;
+                padding: 15px 10px;
+            }
+            
+            .submit-btn {
+                font-size: 26px;
+                padding: 16px 60px;
+            }
+            
+            .footer {
+                font-size: 17px;
+                padding: 18px;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+            
+            .title-bar {
+                background: #ddd;
+                color: black;
+            }
+            
+            .submit-btn {
+                background: #333;
+                color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Submitting your feedback...</p>
+        </div>
+    </div>
+
+    <div class="header">
+        <img src="logo.jpg" alt="Customs logo" class="logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'80\' viewBox=\'0 0 160 80\'><rect width=\'160\' height=\'80\' fill=\'%232f5da9\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\' font-weight=\'bold\'>CUSTOMS</text></svg>'">
+        <div class="header-text">
+            <h2>भारतीय सीमा शुल्क</h2>
+            <p>सरदार वल्लभभाई पटेल अंतरराष्ट्रीय हवाई अड्डा, अहमदाबाद</p>
+        </div>
+    </div>
+
+    <div class="title-bar">यात्री प्रतिक्रिया प्रपत्र</div>
+    <div class="title-bar">प्रदान की गई जानकारी स्वैच्छिक है एवं गोपनीय रखी जाएगी।</div>
+
+    <form id="feedbackForm">
+
+        <!-- I. Passenger details (optional) -->
+        <div class="section">
+            <h3>भाग-I : यात्री विवरण (वैकल्पिक)</h3>
+            
+            <div class="grid-row">
+                <div class="field-group">
+                    <label>यात्री का नाम:</label>
+                    <input type="text" name="name" placeholder="FirstName LastName" required>
+                </div>
+                
+                <div class="field-group">
+                    <label>मोबाइल नं.:</label>
+                    <input type="tel" name="mobile" pattern="[6-9][0-9]{9}" maxlength="10" placeholder="9876543210" required>
+                </div>
+            </div>
+            
+            <div class="grid-row">
+                <div class="field-group">
+                    <label>ई-मेल आईडी :</label>
+                    <input type="email" name="email" placeholder="name@gmail.com" required>
+                </div>
+                
+                <div class="field-group">
+                    <label>उड़ान संख्या :</label>
+                    <input type="text" name="flight" placeholder="AI203 / 6E511" required>
+                </div>
+            </div>
+            
+            <div class="grid-row">
+                <div class="field-group">
+                    <label>दिनांक:</label>
+                    <input type="date" name="date" value="2026-03-20" required>
+                </div>
+            </div>
+            
+            <!-- Arrival/Departure -->
+            <div class="arrival-departure-container">
+                <span class="inline-label">आगमन / प्रस्थान:</span>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="arrival_departure" value="Arrival" id="arrivalRadio" required> आगमन
+                    </label>
+                    <label>
+                        <input type="radio" name="arrival_departure" value="Departure" id="departureRadio"> प्रस्थान
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Dynamic country list for arrival -->
+            <div id="countryListContainer" class="arrival-country-block" style="display: none;">
+    <label>आगमन का देश:</label>
+    <select id="countrySelect" class="select-style" name="arrival_country">
+        <option value="">-- select country --</option>
+        <option value="Afghanistan">Afghanistan</option>
+        <option value="Albania">Albania</option>
+        <option value="Algeria">Algeria</option>
+        <option value="Andorra">Andorra</option>
+        <option value="Angola">Angola</option>
+        <option value="Antigua and Barbuda">Antigua and Barbuda</option>
+        <option value="Argentina">Argentina</option>
+        <option value="Armenia">Armenia</option>
+        <option value="Australia">Australia</option>
+        <option value="Austria">Austria</option>
+        <option value="Azerbaijan">Azerbaijan</option>
+        <option value="Bahamas">Bahamas</option>
+        <option value="Bahrain">Bahrain</option>
+        <option value="Bangladesh">Bangladesh</option>
+        <option value="Barbados">Barbados</option>
+        <option value="Belarus">Belarus</option>
+        <option value="Belgium">Belgium</option>
+        <option value="Belize">Belize</option>
+        <option value="Benin">Benin</option>
+        <option value="Bhutan">Bhutan</option>
+        <option value="Bolivia">Bolivia</option>
+        <option value="Bosnia and Herzegovina">Bosnia and Herzegovina</option>
+        <option value="Botswana">Botswana</option>
+        <option value="Brazil">Brazil</option>
+        <option value="Brunei">Brunei</option>
+        <option value="Bulgaria">Bulgaria</option>
+        <option value="Burkina Faso">Burkina Faso</option>
+        <option value="Burundi">Burundi</option>
+        <option value="Cabo Verde">Cabo Verde</option>
+        <option value="Cambodia">Cambodia</option>
+        <option value="Cameroon">Cameroon</option>
+        <option value="Canada">Canada</option>
+        <option value="Central African Republic">Central African Republic</option>
+        <option value="Chad">Chad</option>
+        <option value="Chile">Chile</option>
+        <option value="China">China</option>
+        <option value="Colombia">Colombia</option>
+        <option value="Comoros">Comoros</option>
+        <option value="Congo">Congo</option>
+        <option value="Costa Rica">Costa Rica</option>
+        <option value="Croatia">Croatia</option>
+        <option value="Cuba">Cuba</option>
+        <option value="Cyprus">Cyprus</option>
+        <option value="Czech Republic">Czech Republic</option>
+        <option value="Denmark">Denmark</option>
+        <option value="Djibouti">Djibouti</option>
+        <option value="Dominica">Dominica</option>
+        <option value="Dominican Republic">Dominican Republic</option>
+        <option value="Ecuador">Ecuador</option>
+        <option value="Egypt">Egypt</option>
+        <option value="El Salvador">El Salvador</option>
+        <option value="Equatorial Guinea">Equatorial Guinea</option>
+        <option value="Eritrea">Eritrea</option>
+        <option value="Estonia">Estonia</option>
+        <option value="Eswatini">Eswatini</option>
+        <option value="Ethiopia">Ethiopia</option>
+        <option value="Fiji">Fiji</option>
+        <option value="Finland">Finland</option>
+        <option value="France">France</option>
+        <option value="Gabon">Gabon</option>
+        <option value="Gambia">Gambia</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Germany">Germany</option>
+        <option value="Ghana">Ghana</option>
+        <option value="Greece">Greece</option>
+        <option value="Grenada">Grenada</option>
+        <option value="Guatemala">Guatemala</option>
+        <option value="Guinea">Guinea</option>
+        <option value="Guinea-Bissau">Guinea-Bissau</option>
+        <option value="Guyana">Guyana</option>
+        <option value="Haiti">Haiti</option>
+        <option value="Honduras">Honduras</option>
+        <option value="Hungary">Hungary</option>
+        <option value="Iceland">Iceland</option>
+        <option value="India">India</option>
+        <option value="Indonesia">Indonesia</option>
+        <option value="Iran">Iran</option>
+        <option value="Iraq">Iraq</option>
+        <option value="Ireland">Ireland</option>
+        <option value="Israel">Israel</option>
+        <option value="Italy">Italy</option>
+        <option value="Jamaica">Jamaica</option>
+        <option value="Japan">Japan</option>
+        <option value="Jordan">Jordan</option>
+        <option value="Kazakhstan">Kazakhstan</option>
+        <option value="Kenya">Kenya</option>
+        <option value="Kiribati">Kiribati</option>
+        <option value="Korea, North">Korea, North</option>
+        <option value="Korea, South">Korea, South</option>
+        <option value="Kosovo">Kosovo</option>
+        <option value="Kuwait">Kuwait</option>
+        <option value="Kyrgyzstan">Kyrgyzstan</option>
+        <option value="Laos">Laos</option>
+        <option value="Latvia">Latvia</option>
+        <option value="Lebanon">Lebanon</option>
+        <option value="Lesotho">Lesotho</option>
+        <option value="Liberia">Liberia</option>
+        <option value="Libya">Libya</option>
+        <option value="Liechtenstein">Liechtenstein</option>
+        <option value="Lithuania">Lithuania</option>
+        <option value="Luxembourg">Luxembourg</option>
+        <option value="Madagascar">Madagascar</option>
+        <option value="Malawi">Malawi</option>
+        <option value="Malaysia">Malaysia</option>
+        <option value="Maldives">Maldives</option>
+        <option value="Mali">Mali</option>
+        <option value="Malta">Malta</option>
+        <option value="Marshall Islands">Marshall Islands</option>
+        <option value="Mauritania">Mauritania</option>
+        <option value="Mauritius">Mauritius</option>
+        <option value="Mexico">Mexico</option>
+        <option value="Micronesia">Micronesia</option>
+        <option value="Moldova">Moldova</option>
+        <option value="Monaco">Monaco</option>
+        <option value="Mongolia">Mongolia</option>
+        <option value="Montenegro">Montenegro</option>
+        <option value="Morocco">Morocco</option>
+        <option value="Mozambique">Mozambique</option>
+        <option value="Myanmar">Myanmar</option>
+        <option value="Namibia">Namibia</option>
+        <option value="Nauru">Nauru</option>
+        <option value="Nepal">Nepal</option>
+        <option value="Netherlands">Netherlands</option>
+        <option value="New Zealand">New Zealand</option>
+        <option value="Nicaragua">Nicaragua</option>
+        <option value="Niger">Niger</option>
+        <option value="Nigeria">Nigeria</option>
+        <option value="North Macedonia">North Macedonia</option>
+        <option value="Norway">Norway</option>
+        <option value="Oman">Oman</option>
+        <option value="Pakistan">Pakistan</option>
+        <option value="Palau">Palau</option>
+        <option value="Palestine">Palestine</option>
+        <option value="Panama">Panama</option>
+        <option value="Papua New Guinea">Papua New Guinea</option>
+        <option value="Paraguay">Paraguay</option>
+        <option value="Peru">Peru</option>
+        <option value="Philippines">Philippines</option>
+        <option value="Poland">Poland</option>
+        <option value="Portugal">Portugal</option>
+        <option value="Qatar">Qatar</option>
+        <option value="Romania">Romania</option>
+        <option value="Russia">Russia</option>
+        <option value="Rwanda">Rwanda</option>
+        <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option>
+        <option value="Saint Lucia">Saint Lucia</option>
+        <option value="Saint Vincent and the Grenadines">Saint Vincent and the Grenadines</option>
+        <option value="Samoa">Samoa</option>
+        <option value="San Marino">San Marino</option>
+        <option value="Sao Tome and Principe">Sao Tome and Principe</option>
+        <option value="Saudi Arabia">Saudi Arabia</option>
+        <option value="Senegal">Senegal</option>
+        <option value="Serbia">Serbia</option>
+        <option value="Seychelles">Seychelles</option>
+        <option value="Sierra Leone">Sierra Leone</option>
+        <option value="Singapore">Singapore</option>
+        <option value="Slovakia">Slovakia</option>
+        <option value="Slovenia">Slovenia</option>
+        <option value="Solomon Islands">Solomon Islands</option>
+        <option value="Somalia">Somalia</option>
+        <option value="South Africa">South Africa</option>
+        <option value="South Sudan">South Sudan</option>
+        <option value="Spain">Spain</option>
+        <option value="Sri Lanka">Sri Lanka</option>
+        <option value="Sudan">Sudan</option>
+        <option value="Suriname">Suriname</option>
+        <option value="Sweden">Sweden</option>
+        <option value="Switzerland">Switzerland</option>
+        <option value="Syria">Syria</option>
+        <option value="Taiwan">Taiwan</option>
+        <option value="Tajikistan">Tajikistan</option>
+        <option value="Tanzania">Tanzania</option>
+        <option value="Thailand">Thailand</option>
+        <option value="Timor-Leste">Timor-Leste</option>
+        <option value="Togo">Togo</option>
+        <option value="Tonga">Tonga</option>
+        <option value="Trinidad and Tobago">Trinidad and Tobago</option>
+        <option value="Tunisia">Tunisia</option>
+        <option value="Turkey">Turkey</option>
+        <option value="Turkmenistan">Turkmenistan</option>
+        <option value="Tuvalu">Tuvalu</option>
+        <option value="Uganda">Uganda</option>
+        <option value="Ukraine">Ukraine</option>
+        <option value="United Arab Emirates">United Arab Emirates</option>
+        <option value="United Kingdom">United Kingdom</option>
+        <option value="United States">United States</option>
+        <option value="Uruguay">Uruguay</option>
+        <option value="Uzbekistan">Uzbekistan</option>
+        <option value="Vanuatu">Vanuatu</option>
+        <option value="Vatican City">Vatican City</option>
+        <option value="Venezuela">Venezuela</option>
+        <option value="Vietnam">Vietnam</option>
+        <option value="Yemen">Yemen</option>
+        <option value="Zambia">Zambia</option>
+        <option value="Zimbabwe">Zimbabwe</option>
+        <option value="Other">Other</option>
+    </select>
+</div>
+        </div>
+
+        <!-- II. Assessment of Customs services -->
+        <div class="section">
+            <h3>भाग-II : सीमा शुल्क सेवाओं का मूल्यांकन</h3>
+            
+            <!-- 1. Behaviour of Customs Officers -->
+            <p style="font-size:18px; font-weight:700; color:#1a3b62; margin:10px 0 15px 5px;">1. सीमा शुल्क अधिकारियों का व्यवहार</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>विवरण</th>
+                        <th>बहुत अच्छा </th>
+                        <th>अच्छा</th>
+                        <th>संतोषजनक</th>
+                        <th>असंतोषजनक</th>
+                    </tr>
+                    <tr>
+                        <td>शिष्टाचार</td>
+                        <td><input type="radio" name="courtesy" value="Very Good" required></td>
+                        <td><input type="radio" name="courtesy" value="Good"></td>
+                        <td><input type="radio" name="courtesy" value="Satisfactory"></td>
+                        <td><input type="radio" name="courtesy" value="Unsatisfactory"></td>
+                    </tr>
+                    <tr>
+                        <td>व्यावसायिक आचरण</td>
+                        <td><input type="radio" name="professional" value="Very Good" required></td>
+                        <td><input type="radio" name="professional" value="Good"></td>
+                        <td><input type="radio" name="professional" value="Satisfactory"></td>
+                        <td><input type="radio" name="professional" value="Unsatisfactory"></td>
+                    </tr>
+                    <tr>
+                        <td>सहयोग</td>
+                        <td><input type="radio" name="helpfulness" value="Very Good" required></td>
+                        <td><input type="radio" name="helpfulness" value="Good"></td>
+                        <td><input type="radio" name="helpfulness" value="Satisfactory"></td>
+                        <td><input type="radio" name="helpfulness" value="Unsatisfactory"></td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 2. Duty payment counter experience -->
+            <p style="font-size:18px; font-weight:700; color:#1a3b62; margin:30px 0 15px 5px;">2. शुल्क भुगतान काउंटर पर अनुभव (यदि लागू हो)</p>
+            
+            <div class="duty-question">
+                <span>शुल्क भुगतान काउंटर पर गए?</span>
+                <label><input type="radio" name="duty_visited" value="yes" id="dutyYes">हाँ</label>
+                <label><input type="radio" name="duty_visited" value="no" id="dutyNo" checked>नहीं</label>
+            </div>
+            
+            <div id="dutyPaymentSection" class="conditional-section" style="display: none;">
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+							<th>विवरण</th>
+							<th>बहुत अच्छा </th>
+							<th>अच्छा</th>
+							<th>संतोषजनक</th>
+							<th>असंतोषजनक</th>
+                    </tr>
+                        <tr>
+                            <td>प्रक्रिया की सरलता </td>
+                            <td><input type="radio" name="ease_procedure" value="Very Good" required></td>
+                            <td><input type="radio" name="ease_procedure" value="Good"></td>
+                            <td><input type="radio" name="ease_procedure" value="Satisfactory"></td>
+                            <td><input type="radio" name="ease_procedure" value="Unsatisfactory"></td>
+                        </tr>
+                        <tr>
+                            <td>जानकारी की स्पष्टता</td>
+                            <td><input type="radio" name="clarity" value="Very Good" required></td>
+                            <td><input type="radio" name="clarity" value="Good"></td>
+                            <td><input type="radio" name="clarity" value="Satisfactory"></td>
+                            <td><input type="radio" name="clarity" value="Unsatisfactory"></td>
+                        </tr>
+                        <tr>
+                            <td>लिया गया समय</td>
+                            <td><input type="radio" name="time_taken" value="Very Good" required></td>
+                            <td><input type="radio" name="time_taken" value="Good"></td>
+                            <td><input type="radio" name="time_taken" value="Satisfactory"></td>
+                            <td><input type="radio" name="time_taken" value="Unsatisfactory"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 3. Visibility of instructions & signage -->
+            <p style="font-size:18px; font-weight:700; color:#1a3b62; margin:30px 0 15px 5px;">3. निर्देशों एवं संकेतों की उपलब्धता</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th style="width:40%;">मद</th>
+                        <th style="width:30%;">हाँ</th>
+                        <th style="width:30%;">नहीं</th>
+                    </tr>
+                    <tr>
+                        <td> रेड चैनल संकेत</td>
+                        <td><input type="radio" name="red_channel" value="Yes" required></td>
+                        <td><input type="radio" name="red_channel" value="No"></td>
+                    </tr>
+                    <tr>
+                        <td>ग्रीन चैनल संकेत </td>
+                        <td><input type="radio" name="green_channel" value="Yes" required></td>
+                        <td><input type="radio" name="green_channel" value="No"></td>
+                    </tr>
+                    <tr>
+                        <td>सामान घोषणा निर्देश </td>
+                        <td><input type="radio" name="baggage" value="Yes" required></td>
+                        <td><input type="radio" name="baggage" value="No"></td>
+                    </tr>
+                    <tr>
+                        <td>निषिद्ध/प्रतिबंधित वस्तुओं की </td>
+                        <td><input type="radio" name="prohibited" value="Yes" required></td>
+                        <td><input type="radio" name="prohibited" value="No"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- III. Overall Experience -->
+        <div class="overall-section">
+            <h3>भाग-III : समग्र अनुभव</h3>
+            
+            <!-- Desktop Version (Table) -->
+            <table class="overall-table-desktop">
+                <tr>
+                    <th>बहुत अच्छा </th>
+					<th>अच्छा</th>
+					<th>संतोषजनक</th>
+					<th>असंतोषजनक</th>
+                </tr>
+                <tr>
+                    <td class="overall-cell" data-value="Very Good">
+                        <input type="radio" name="overall" value="Very Good" class="overall-radio" required>
+                    </td>
+                    <td class="overall-cell" data-value="Good">
+                        <input type="radio" name="overall" value="Good" class="overall-radio">
+                    </td>
+                    <td class="overall-cell" data-value="Satisfactory">
+                        <input type="radio" name="overall" value="Satisfactory" class="overall-radio">
+                    </td>
+                    <td class="overall-cell" data-value="Unsatisfactory">
+                        <input type="radio" name="overall" value="Unsatisfactory" class="overall-radio">
+                    </td>
+                </tr>
+            </table>
+            
+            <!-- Mobile Version (Grid Cards) -->
+            <div class="overall-mobile-grid">
+                <div class="overall-card" data-value="Very Good">
+                    <span class="overall-card-label">बहुत अच्छा</span>
+                    <input type="radio" name="overall" value="Very Good" class="overall-radio">
+                </div>
+                <div class="overall-card" data-value="Good">
+                    <span class="overall-card-label">अच्छा</span>
+                    <input type="radio" name="overall" value="Good" class="overall-radio">
+                </div>
+                <div class="overall-card" data-value="Satisfactory">
+                    <span class="overall-card-label">संतोषजनक</span>
+                    <input type="radio" name="overall" value="Satisfactory" class="overall-radio">
+                </div>
+                <div class="overall-card" data-value="Unsatisfactory">
+                    <span class="overall-card-label">असंतोषजनक</span>
+                    <input type="radio" name="overall" value="Unsatisfactory" class="overall-radio">
+                </div>
+            </div>
+            <div id="overallError" class="error-message">कृपया अपने समग्र अनुभव का चयन करें</div>
+        </div>
+
+        <!-- IV. Suggestions / Remarks -->
+        <div class="section">
+            <h3>भाग-IV : सुझाव / टिप्पणी (यदि कोई हो)</h3>
+            <textarea class="remarks-area" name="remarks" placeholder="Please share your experience or suggestions..."></textarea>
+        </div>
+
+        <div class="submit-area">
+            <button type="submit" class="submit-btn" id="submitBtn">प्रतिक्रिया सबमिट करें</button>
+        </div>
+    </form>
+
+    <div class="footer">
+        आपकी बहुमूल्य प्रतिक्रिया के लिए धन्यवाद।<br>
+        सीमा शुल्क सुरक्षित, संरक्षित एवं सुगम यात्री आवागमन हेतु प्रतिबद्ध है।
+    </div>
+</div>
+
+<!-- JavaScript for conditional fields -->
+<script>
+    (function() {
+        // Duty payment toggle
+        const dutyYes = document.getElementById('dutyYes');
+        const dutyNo = document.getElementById('dutyNo');
+        const dutySection = document.getElementById('dutyPaymentSection');
+
+        function toggleDutySection() {
+            if (dutyYes.checked) {
+                dutySection.style.display = 'block';
+            } else {
+                dutySection.style.display = 'none';
+                const dutyRadios = dutySection.querySelectorAll('input[type=radio]');
+                dutyRadios.forEach(r => r.checked = false);
+            }
+        }
+        
+        if (dutyYes && dutyNo && dutySection) {
+            dutyYes.addEventListener('change', toggleDutySection);
+            dutyNo.addEventListener('change', toggleDutySection);
+            toggleDutySection();
+        }
+
+        // Arrival / Departure country list
+        const arrivalRadio = document.getElementById('arrivalRadio');
+        const departureRadio = document.getElementById('departureRadio');
+        const countryDiv = document.getElementById('countryListContainer');
+
+        function toggleCountryList() {
+            if (arrivalRadio && arrivalRadio.checked) {
+                countryDiv.style.display = 'flex';
+                document.getElementById('countrySelect').setAttribute('name', 'arrival_country');
+            } else {
+                countryDiv.style.display = 'none';
+                document.getElementById('countrySelect').removeAttribute('name');
+            }
+        }
+        
+        if (arrivalRadio && departureRadio && countryDiv) {
+            arrivalRadio.addEventListener('change', toggleCountryList);
+            departureRadio.addEventListener('change', toggleCountryList);
+            toggleCountryList();
+        }
+
+        // Overall Experience - Make entire cells/cards clickable
+        const overallRadios = document.querySelectorAll('.overall-radio');
+        const overallCells = document.querySelectorAll('.overall-cell');
+        const overallCards = document.querySelectorAll('.overall-card');
+        
+        // Function to handle selection
+        function selectOverall(value) {
+            overallRadios.forEach(radio => {
+                if (radio.value === value) {
+                    radio.checked = true;
+                    // Trigger change event
+                    const event = new Event('change', { bubbles: true });
+                    radio.dispatchEvent(event);
+                }
+            });
+        }
+        
+        // Add click handlers to desktop cells
+        overallCells.forEach(cell => {
+            cell.addEventListener('click', function(e) {
+                // Don't trigger if clicking directly on radio (prevents double trigger)
+                if (e.target.tagName !== 'INPUT') {
+                    const value = this.getAttribute('data-value');
+                    selectOverall(value);
+                }
+            });
+        });
+        
+        // Add click handlers to mobile cards
+        overallCards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Don't trigger if clicking directly on radio
+                if (e.target.tagName !== 'INPUT') {
+                    const value = this.getAttribute('data-value');
+                    selectOverall(value);
+                }
+            });
+        });
+        
+        // Sync radios and hide error
+        overallRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('overallError').style.display = 'none';
+                }
+            });
+        });
+    })();
+</script>
+
+<!-- Form Submission Script with Loading Indicator -->
+<script>
+const scriptURL = "https://script.google.com/macros/s/AKfycbzq2_QqfceO-3hRiyNvCOU-MuGnDaq237NF91rO75pRiythR4jvHbGDlEFM-pQX24V_/exec";
+const form = document.getElementById("feedbackForm");
+const submitBtn = document.getElementById("submitBtn");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const overallError = document.getElementById("overallError");
+
+/* Hide error when any overall option is selected */
+const overallRadios = document.querySelectorAll('input[name="overall"]');
+overallRadios.forEach(radio => {
+    radio.addEventListener("change", function() {
+        overallError.style.display = "none";
+    });
+});
+
+form.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  // Check if overall is selected
+  const overallChecked = document.querySelector('input[name="overall"]:checked');
+  
+  if (!overallChecked) {
+      overallError.style.display = 'block';
+      document.querySelector('.overall-section').scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+      });
+      return;
+  }
+
+  const overallValue = overallChecked.value;
+
+  // Disable submit button and show loading
+  submitBtn.disabled = true;
+  loadingOverlay.style.display = 'flex';
+
+  fetch(scriptURL, {
+    method: "POST",
+    body: new FormData(form)
+  })
+  .then(response => response.json())
+  .then(data => {
+
+      loadingOverlay.style.display = 'none';
+      
+      if (data.result === "success") {
+
+          if (overallValue === "Unsatisfactory") {
+              alert("Your complaint has been registered successfully. Our team will contact you shortly.");
+          } else {
+              alert("Your form is submitted successfully. Thank you ");
+          }
+
+          // Redirect after 2 seconds
+          setTimeout(function(){
+              window.location.href = "index.html";
+          }, 2000);
+
+      } else {
+          alert("Submission failed. Please try again.");
+          submitBtn.disabled = false;
+      }
+
+  })
+  .catch(error => {
+      loadingOverlay.style.display = 'none';
+      alert("Error submitting form. Please check your internet connection and try again.");
+      console.error(error);
+      submitBtn.disabled = false;
+  });
+});
+</script>
+</body>
+</html>
