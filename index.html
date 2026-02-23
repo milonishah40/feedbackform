@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Select Language · Indian Customs</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f8fafd;
+            padding: clamp(10px, 2vw, 25px) clamp(5px, 2vw, 10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: min(1200px, 100%);
+            max-width: 100%;
+            background: #ffffff;
+            padding: clamp(20px, 3vw, 40px);
+            border-radius: clamp(20px, 3vw, 32px);
+            box-shadow: 0 10px 30px rgba(0, 20, 50, 0.08);
+            border: 1px solid #e0e8f2;
+        }
+
+        /* Responsive Header */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: clamp(20px, 5vw, 75px);
+            padding-bottom: clamp(15px, 2vw, 20px);
+            flex-wrap: wrap;
+            justify-content: center;
+            border-bottom: 2px solid #2f5da9;
+        }
+
+        .header .logo {
+            width: clamp(120px, 15vw, 200px);
+            height: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 5px;
+            border: 1px solid #d0ddee;
+        }
+
+        .header-text {
+            text-align: center;
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .header-text h2 {
+            color: #1e3a6b;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: clamp(22px, 4vw, 32px);
+            margin-bottom: clamp(5px, 1vw, 8px);
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+
+        .header-text p {
+            color: #2b4a77;
+            font-weight: 600;
+            font-size: clamp(14px, 2.5vw, 18px);
+            background: #eef3fb;
+            padding: clamp(6px, 1.2vw, 8px) clamp(20px, 3vw, 30px);
+            border-radius: 50px;
+            display: inline-block;
+            line-height: 1.4;
+            border: 1px solid #d0ddee;
+        }
+
+        .title-bar {
+            background: #2f5da9;
+            color: white;
+            padding: clamp(12px, 2vw, 16px) clamp(10px, 2vw, 20px);
+            text-align: center;
+            font-weight: bold;
+            font-size: clamp(20px, 3.5vw, 28px);
+            margin-top: clamp(15px, 2.5vw, 20px);
+            border-radius: 8px;
+            letter-spacing: 1px;
+            border: 1px solid #1e4a7a;
+        }
+
+        .section {
+            margin-top: clamp(25px, 4vw, 35px);
+            background: #ffffff;
+            border-radius: clamp(24px, 3vw, 32px);
+            padding: clamp(15px, 2.5vw, 20px) clamp(15px, 2.5vw, 20px);
+            border: 1px solid #e0eaf5;
+        }
+
+        .section h3 {
+            background: transparent;
+            padding: 0;
+            border-left: none;
+            font-size: clamp(24px, 4vw, 36px);
+            font-weight: 700;
+            color: #1a3b62;
+            text-align: center;
+            margin-bottom: clamp(25px, 4vw, 40px);
+            position: relative;
+        }
+
+        .section h3:after {
+            content: '';
+            display: block;
+            width: min(120px, 30%);
+            height: 3px;
+            background: #2f5da9;
+            margin: 15px auto 0;
+            border-radius: 3px;
+        }
+
+        .center-section {
+            text-align: center;
+            padding: clamp(10px, 2vw, 20px) clamp(10px, 2vw, 20px);
+        }
+
+        .radio-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8fafd;
+            padding: clamp(15px, 2.5vw, 25px);
+            margin: clamp(15px, 2.5vw, 25px) auto;
+            width: min(450px, 90%);
+            border-radius: 12px;
+            font-size: clamp(20px, 3.5vw, 28px);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid #c8daf5;
+            box-shadow: 0 4px 12px rgba(0, 30, 60, 0.05);
+        }
+
+        .radio-box:hover {
+            background: #eef3fb;
+            border-color: #2f5da9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(43, 95, 158, 0.15);
+        }
+
+        .radio-box input[type="radio"] {
+            width: clamp(24px, 3vw, 32px);
+            height: clamp(24px, 3vw, 32px);
+            margin-right: 15px;
+            accent-color: #2f5da9;
+            cursor: pointer;
+        }
+
+        .radio-box span {
+            color: #1e3a6b;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn {
+            background: #2f5da9;
+            color: white;
+            border: none;
+            padding: clamp(14px, 2.5vw, 18px) clamp(40px, 6vw, 70px);
+            font-size: clamp(20px, 3.5vw, 26px);
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(43, 95, 158, 0.2);
+            border: 1px solid #1e4a7a;
+            margin-top: clamp(15px, 2.5vw, 25px);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .submit-btn:hover {
+            background: #1e4a7a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(43, 95, 158, 0.25);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: clamp(25px, 4vw, 35px);
+            font-size: clamp(14px, 2.2vw, 18px);
+            color: #2b4a77;
+            background: #f0f7ff;
+            padding: clamp(12px, 2vw, 18px);
+            border-radius: 12px;
+            font-weight: 500;
+            border: 1px solid #d0ddee;
+            line-height: 1.6;
+        }
+
+        /* Animation for radio boxes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .radio-box {
+            animation: fadeInUp 0.4s ease forwards;
+            opacity: 0;
+        }
+
+        .radio-box:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .radio-box:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .radio-box:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        /* Large Screen (32-inch and above) */
+        @media (min-width: 2000px) {
+            .container {
+                width: 1600px;
+                padding: 50px 80px;
+            }
+            
+            .header-text h2 {
+                font-size: 42px;
+            }
+            
+            .header-text p {
+                font-size: 22px;
+                padding: 12px 40px;
+            }
+            
+            .title-bar {
+                font-size: 36px;
+                padding: 20px;
+            }
+            
+            .section h3 {
+                font-size: 42px;
+                margin-bottom: 50px;
+            }
+            
+            .radio-box {
+                width: 600px;
+                font-size: 32px;
+                padding: 25px;
+                margin: 25px auto;
+            }
+            
+            .radio-box input[type="radio"] {
+                width: 36px;
+                height: 36px;
+                margin-right: 18px;
+            }
+            
+            .submit-btn {
+                font-size: 30px;
+                padding: 18px 80px;
+            }
+            
+            .footer {
+                font-size: 20px;
+                padding: 18px;
+            }
+        }
+
+        /* Medium Screens (Laptops) */
+        @media (min-width: 1024px) and (max-width: 1999px) {
+            .container {
+                width: 900px;
+            }
+        }
+
+        /* Small Screens (Mobile) */
+        @media (max-width: 768px) {
+            .header {
+                gap: 15px;
+            }
+            
+            .header .logo {
+                width: 100px;
+            }
+            
+            .header-text h2 {
+                font-size: 20px;
+            }
+            
+            .header-text p {
+                font-size: 12px;
+                padding: 6px 15px;
+            }
+            
+            .title-bar {
+                font-size: 18px;
+                padding: 10px;
+            }
+            
+            .section h3 {
+                font-size: 24px;
+            }
+            
+            .radio-box {
+                width: 95%;
+                padding: 12px;
+                font-size: 18px;
+            }
+            
+            .radio-box input[type="radio"] {
+                width: 20px;
+                height: 20px;
+                margin-right: 8px;
+            }
+            
+            .submit-btn {
+                font-size: 18px;
+                padding: 10px 30px;
+            }
+            
+            .footer {
+                font-size: 12px;
+                padding: 10px;
+            }
+        }
+
+        /* Very Small Screens */
+        @media (max-width: 480px) {
+            .header-text h2 {
+                font-size: 18px;
+            }
+            
+            .header-text p {
+                font-size: 10px;
+                padding: 5px 10px;
+            }
+            
+            .title-bar {
+                font-size: 16px;
+            }
+            
+            .section h3 {
+                font-size: 20px;
+            }
+            
+            .radio-box {
+                font-size: 16px;
+                padding: 10px;
+            }
+            
+            .radio-box input[type="radio"] {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .submit-btn {
+                font-size: 16px;
+                padding: 8px 25px;
+            }
+            
+            .footer {
+                font-size: 11px;
+                padding: 8px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+            
+            .title-bar {
+                background: #ddd;
+                color: black;
+            }
+            
+            .radio-box {
+                border: 1px solid #000;
+                background: white;
+            }
+            
+            .submit-btn {
+                background: #333;
+                color: white;
+            }
+        }
+
+        /* Landscape Mode on Mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .radio-box {
+                margin: 8px auto;
+                padding: 8px;
+            }
+            
+            .section {
+                margin-top: 15px;
+            }
+        }
+
+        /* High DPI Screens */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .header .logo {
+                image-rendering: crisp-edges;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <img src="logo.jpg" alt="Indian Customs Logo" class="logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'200\' height=\'100\' viewBox=\'0 0 200 100\'><rect width=\'200\' height=\'100\' fill=\'%232f5da9\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'24\' font-weight=\'bold\'>CUSTOMS</text></svg>'">
+        <div class="header-text">
+            <h2>INDIAN CUSTOMS</h2>
+            <p>SARDAR VALLABHBHAI PATEL INTERNATIONAL AIRPORT, AHMEDABAD</p>
+        </div>
+    </div>
+
+    <div class="title-bar">
+        Passenger Feedback Portal
+    </div>
+
+    <form id="feedbackForm">
+
+        <div class="section center-section">
+
+            <h3>Select Language</h3>
+
+            <label class="radio-box">
+                <input type="radio" name="language" value="english" required>
+                <span>English</span>
+            </label>
+
+            <label class="radio-box">
+                <input type="radio" name="language" value="hindi">
+                <span>हिंदी</span>
+            </label>
+
+            <label class="radio-box">
+                <input type="radio" name="language" value="gujarati">
+                <span>ગુજરાતી</span>
+            </label>
+
+            <br>
+
+            <button type="submit" class="submit-btn">Continue →</button>
+
+        </div>
+
+    </form>
+
+    <p class="footer">
+        ✦ Please select your preferred language to continue ✦
+    </p>
+
+</div>
+
+<script>
+const form = document.getElementById("feedbackForm");
+
+form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const language = document.querySelector('input[name="language"]:checked').value;
+
+    if(language === "english"){
+        window.location.href = "feedback_english.html";
+    }
+    else if(language === "hindi"){
+        window.location.href = "feedback_hindi.html";
+    }
+    else if(language === "gujarati"){
+        window.location.href = "feedback_gujarati.html";
+    }
+});
+</script>
+
+</body>
+</html>
