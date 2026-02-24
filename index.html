@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
+    <title>Select Language · Indian Customs</title>
+	<link rel="icon" type="logo.jpg" href="logo.jpg">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f5f9ff;
+            padding: 15px 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: min(1200px, 100%);
+            max-width: 100%;
+            background: #ffffff;
+            padding: 20px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 20, 50, 0.08);
+            border: 1px solid #dde5f0;
+        }
+        
+        /* Loading Overlay (kept for consistency) */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-spinner {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #2f5da9;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-spinner p {
+            color: #1a3b62;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        /* Responsive Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+            text-align: center;
+            border-bottom: 2px solid #2f5da9;
+        }
+        
+        .header .logo {
+            width: 160px;
+            height: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 5px;
+            border: 1px solid #d0ddee;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .header-text {
+            text-align: center;
+            flex: 0 1 auto;
+        }
+        
+        .header-text h2 {
+            color: #1e3a6b;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-size: 28px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            line-height: 1.3;
+            text-align: center;
+        }
+        
+        .header-text p {
+            color: #2b4a77;
+            font-weight: 600;
+            font-size: 16px;
+            background: #e9f0fa;
+            padding: 6px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            line-height: 1.4;
+            text-align: center;
+            margin: 0 auto;
+            border: 1px solid #d0ddee;
+        }
+        
+        .title-bar {
+            background: #2f5da9;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 22px;
+            margin-top: 15px;
+            border-radius: 8px;
+            border: 1px solid #1e4a7a;
+        }
+        
+        .section {
+            margin-top: 30px;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 25px 20px 30px;
+            border: 1px solid #d2e0f0;
+        }
+        
+        .section h3 {
+            background: #eef3fb;
+            padding: 12px 20px;
+            border-left: 5px solid #2f5da9;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a3b62;
+            margin-bottom: 30px;
+            line-height: 1.3;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+        }
+        
+        .section h3:after {
+            display: none;
+        }
+        
+        .center-section {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Language options container for perfect centering */
+        .language-options {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .radio-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            font-weight: 600;
+            color: #1e3e6d;
+            font-size: 24px;
+            background: white;
+            padding: 20px 30px;
+            margin: 15px auto;
+            width: min(500px, 90%);
+            border-radius: 16px;
+            border: 2px solid #2f5da9;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 30, 60, 0.08);
+            text-align: center;
+        }
+        
+        .radio-box:hover {
+            background: #e3efff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(47, 93, 169, 0.2);
+        }
+        
+        .radio-box input[type="radio"] {
+            width: 26px;
+            height: 26px;
+            accent-color: #2f5da9;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .radio-box span {
+            color: #1a3b62;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .submit-area {
+            text-align: center;
+            margin: 30px 0 10px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .submit-btn {
+            background: #2f5da9;
+            color: white;
+            font-weight: 700;
+            font-size: 24px;
+            padding: 14px 60px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(47, 93, 169, 0.3);
+            transition: 0.2s;
+            letter-spacing: 1px;
+            border: 2px solid #1e4a7a;
+            width: fit-content;
+            margin: 0 auto;
+        }
+        
+        .submit-btn:hover {
+            background: #1e4a7a;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(47, 93, 169, 0.4);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 16px;
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: #1e3a6b;
+            border: 2px solid #b8cee8;
+            line-height: 1.6;
+        }
+        
+        /* Animation for radio boxes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .radio-box {
+            animation: fadeInUp 0.4s ease forwards;
+            opacity: 0;
+        }
+        
+        .radio-box:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        
+        .radio-box:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .radio-box:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        
+        /* Error message */
+        .error-message {
+            color: #e74c3c;
+            font-size: 16px;
+            margin-top: 10px;
+            display: none;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                gap: 15px;
+            }
+            
+            .header .logo {
+                width: 120px;
+            }
+            
+            .header-text h2 {
+                font-size: 22px;
+            }
+            
+            .header-text p {
+                font-size: 13px;
+                padding: 5px 15px;
+            }
+            
+            .title-bar {
+                font-size: 18px;
+                padding: 10px;
+            }
+            
+            .section {
+                padding: 15px 15px 20px;
+            }
+            
+            .section h3 {
+                font-size: 20px;
+                padding: 10px 15px;
+                margin-bottom: 20px;
+            }
+            
+            .radio-box {
+                font-size: 20px;
+                padding: 15px 20px;
+                margin: 12px auto;
+                width: min(450px, 95%);
+            }
+            
+            .radio-box input[type="radio"] {
+                width: 22px;
+                height: 22px;
+            }
+            
+            .submit-btn {
+                font-size: 20px;
+                padding: 12px 50px;
+            }
+            
+            .footer {
+                font-size: 14px;
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header-text h2 {
+                font-size: 18px;
+            }
+            
+            .header-text p {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+            
+            .title-bar {
+                font-size: 16px;
+            }
+            
+            .section h3 {
+                font-size: 18px;
+            }
+            
+            .radio-box {
+                font-size: 18px;
+                padding: 12px 15px;
+                margin: 10px auto;
+                width: 95%;
+            }
+            
+            .radio-box input[type="radio"] {
+                width: 20px;
+                height: 20px;
+                margin-right: 8px;
+            }
+            
+            .submit-btn {
+                font-size: 18px;
+                padding: 10px 40px;
+            }
+            
+            .footer {
+                font-size: 12px;
+                padding: 10px;
+            }
+        }
+        
+        /* Large Screens (32-inch and above) */
+        @media (min-width: 1600px) {
+            .container {
+                width: 1400px;
+                padding: 30px 40px;
+            }
+            
+            .header .logo {
+                width: 180px;
+            }
+            
+            .header-text h2 {
+                font-size: 32px;
+            }
+            
+            .header-text p {
+                font-size: 18px;
+                padding: 8px 25px;
+            }
+            
+            .title-bar {
+                font-size: 26px;
+                padding: 15px;
+            }
+            
+            .section h3 {
+                font-size: 28px;
+                padding: 15px 25px;
+            }
+            
+            .radio-box {
+                font-size: 28px;
+                padding: 25px 35px;
+                margin: 20px auto;
+                width: 600px;
+            }
+            
+            .radio-box input[type="radio"] {
+                width: 30px;
+                height: 30px;
+                margin-right: 15px;
+            }
+            
+            .submit-btn {
+                font-size: 28px;
+                padding: 16px 70px;
+            }
+            
+            .footer {
+                font-size: 18px;
+                padding: 18px;
+            }
+        }
+        
+        /* Landscape Mode on Mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .radio-box {
+                margin: 8px auto;
+                padding: 10px 15px;
+            }
+            
+            .section {
+                margin-top: 15px;
+                padding: 15px;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+            
+            .title-bar {
+                background: #ddd;
+                color: black;
+            }
+            
+            .radio-box {
+                border: 1px solid #000;
+                background: white;
+                box-shadow: none;
+            }
+            
+            .radio-box:hover {
+                transform: none;
+                background: white;
+            }
+            
+            .submit-btn {
+                background: #333;
+                color: white;
+            }
+        }
+        
+        /* High DPI Screens */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .header .logo {
+                image-rendering: crisp-edges;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loading Overlay (optional - can be removed if not needed) -->
+<div class="loading-overlay" id="loadingOverlay" style="display: none;">
+    <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="header">
+        <img src="logo.jpg" alt="Indian Customs Logo" class="logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'80\' viewBox=\'0 0 160 80\'><rect width=\'160\' height=\'80\' fill=\'%232f5da9\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'white\' font-size=\'20\' font-weight=\'bold\'>CUSTOMS</text></svg>'">
+        <div class="header-text">
+            <h2>INDIAN CUSTOMS</h2>
+            <p>SVPI AIRPORT, AHMEDABAD</p>
+        </div>
+    </div>
+
+    <div class="title-bar">
+        PASSENGER FEEDBACK PORTAL
+    </div>
+
+    <form id="languageForm">
+
+        <div class="section center-section">
+            <h3>SELECT LANGUAGE</h3>
+
+            <div class="language-options">
+                <label class="radio-box">
+                    <input type="radio" name="language" value="english" required>
+                    <span>English</span>
+                </label>
+
+                <label class="radio-box">
+                    <input type="radio" name="language" value="hindi">
+                    <span>हिंदी</span>
+                </label>
+
+                <label class="radio-box">
+                    <input type="radio" name="language" value="gujarati">
+                    <span>ગુજરાતી</span>
+                </label>
+            </div>
+
+            <div id="languageError" class="error-message">Please select a language to continue</div>
+
+            <div class="submit-area">
+                <button type="submit" class="submit-btn" id="submitBtn">CONTINUE →</button>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="footer">
+        ✦ Please select your preferred language to continue ✦
+    </div>
+</div>
+
+<script>
+const form = document.getElementById("languageForm");
+const submitBtn = document.getElementById("submitBtn");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const languageError = document.getElementById("languageError");
+
+// Hide error when any language is selected
+const languageRadios = document.querySelectorAll('input[name="language"]');
+languageRadios.forEach(radio => {
+    radio.addEventListener("change", function() {
+        languageError.style.display = "none";
+    });
+});
+
+form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    // Check if language is selected
+    const selectedLanguage = document.querySelector('input[name="language"]:checked');
+    
+    if (!selectedLanguage) {
+        languageError.style.display = 'block';
+        // Scroll to error
+        document.querySelector('.section').scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+        });
+        return;
+    }
+
+    const language = selectedLanguage.value;
+
+    // Show loading (optional)
+    submitBtn.disabled = true;
+    loadingOverlay.style.display = 'flex';
+
+    // Simulate small delay for better UX
+    setTimeout(() => {
+        if(language === "english"){
+            window.location.href = "feedback_english.html";
+        }
+        else if(language === "hindi"){
+            window.location.href = "feedback_hindi.html";
+        }
+        else if(language === "gujarati"){
+            window.location.href = "feedback_gujarati.html";
+        }
+    }, 300);
+});
+</script>
+
+</body>
+</html>
